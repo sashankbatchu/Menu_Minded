@@ -3,8 +3,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Welcome from './Screens/Welcome';
-
-
+import AllergenPage from './Screens/AllergenPage';
+import RestrictionsPage from './Screens/RestrictionsPage';
+import NutritionalGoalsPage from './Screens/NutritionalGoalsPage';
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -15,7 +16,9 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Welcome" component={Welcome}/>
+        <Stack.Screen name="NutritionalGoalsPage" component={NutritionalGoalsPage}/>
+        <Stack.Screen name="AllergenPage" component={AllergenPage}/>
+        <Stack.Screen name="RestrictionsPage" component={RestrictionsPage}/>
       </Stack.Navigator>
     </NavigationContainer>
   )
