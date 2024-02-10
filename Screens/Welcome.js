@@ -3,14 +3,18 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import Camera from './Camera';
 
 
-
 const Welcome = ({ navigation }) => {
+  const [showText, setShowText] = useState(false);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>MenuApp</Text>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Camera')}
+        onPress={() => {
+          navigation.navigate('Camera')
+
+        }}
       >
         <Image
           source={require('../assets/camera.png')} // Adjust the path to your image
