@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import Camera from './Camera';
+import Cam from './Cam';
 import manipulateData from '../DataManipulation';
 
 const Welcome = ({ navigation }) => {
@@ -42,7 +42,7 @@ const Welcome = ({ navigation }) => {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          navigation.navigate('Camera')
+          navigation.navigate('Cam')
 
         }}
       >
