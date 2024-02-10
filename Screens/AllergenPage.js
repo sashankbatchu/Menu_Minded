@@ -42,9 +42,8 @@ export const allergensInfo = [
     }
   ];
 
-const AllergensPage = ({ navigation, route }) => {
+const AllergensPage = ({ navigation }) => {
     const [selectedAllergens, setSelectedAllergens] = useState([])
-    const { photos } = route.params;
     function onMultiChange() {
         return (item) => setSelectedAllergens(xorBy(selectedAllergens, [item], 'id'))
     }
@@ -69,7 +68,7 @@ const AllergensPage = ({ navigation, route }) => {
                 />
             </View>
             <View style={styles.buttonContainer}>
-              <Button title="Next" color={"#568259"} onPress={() => {navigation.navigate('RestrictionsPage', {photos})}}/>
+              <Button title="Next" color={"#568259"} onPress={() => {navigation.navigate('RestrictionsPage')}}/>
             </View>
         </View>
     );
