@@ -3,7 +3,6 @@ import { View, Text, Button, TextInput, StyleSheet, ScrollView } from 'react-nat
 import SelectBox from 'react-native-multi-selectbox';
 import { xorBy } from 'lodash'
 
-
 export const allergensInfo = [
     {
       item: 'Peanuts',

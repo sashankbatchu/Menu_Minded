@@ -1,13 +1,44 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import Camera from './Camera';
-
+import manipulateData from '../DataManipulation';
 
 const Welcome = ({ navigation }) => {
+  const userJsonData = [
+    {
+      "name": "Ice Cream",
+      "nutritionalValues": {
+        "protein": "2",
+        "carbs": "20",
+        "fat": "10",
+        "sugar": "10",
+        "sodium": "0.05",
+        "cholesterol": "0.01"
+        
+      },
+      "ingredients": "Milk, cream, sugar, flavoring."
+    },
+    {
+      "name": "Chicken Nuggets",
+      "nutritionalValues": {
+        "protein": "15",
+        "carbs": "10",
+        "fat": "5",
+        "sugar": "0.2",
+        "sodium": "0.2",
+        "cholesterol": "0.035"
+        
+      },
+      "ingredients": "Chicken, breading, oil."
+    }
+  ];
+  
+  const resultJson = manipulateData(userJsonData); // Call the function
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>MenuApp</Text>
+      <Text>{resultJson}</Text>
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
@@ -39,7 +70,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     width: 86,
     height: 86,
-    marginTop: 400,
+    marginTop: 200,
     shadowColor: 'black',  
     shadowOffset: { width: 0, height: 2 }, 
     shadowOpacity: 0.5,  
