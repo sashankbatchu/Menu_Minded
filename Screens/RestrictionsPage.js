@@ -63,7 +63,7 @@ const RestrictionsPage = ({ navigation }) => {
                 />
             </View>
             <View style={styles.buttonContainer}>
-                <Button title="Submit" color={"#568259"} onPress={navigation.navigate("RestrictionsPage")} />
+                <Button title="Submit" color={"#568259"} onPress={navigation.navigate("Categories")} />
             </View>
         </View>
     );

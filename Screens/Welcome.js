@@ -4,7 +4,6 @@ import Camera from './Camera';
 
 
 const Welcome = ({ navigation }) => {
-  const [showText, setShowText] = useState(false);
 
   return (
     <View style={styles.container}>

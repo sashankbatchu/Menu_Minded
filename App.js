@@ -4,7 +4,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Welcome from './Screens/Welcome';
 import Camera from './Screens/Camera';
-import Test from './Screens/Test';
 import Categories from './Screens/Categories';
 import AllergenPage from './Screens/AllergenPage';
 import RestrictionsPage from './Screens/RestrictionsPage';
@@ -19,7 +18,12 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Welcome" component={Welcome}/>
+        <Stack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }}/>
+        <Stack.Screen name="Camera" component={Camera} options={{ headerShown: false }}/>
+        <Stack.Screen name="NutritionalGoalsPage" component={NutritionalGoalsPage} options={{ headerShown: false }}/>
+        <Stack.Screen name="AllergenPage" component={AllergenPage} options={{ headerShown: false }}/>
+        <Stack.Screen name="RestrictionsPage" component={RestrictionsPage} options={{ headerShown: false }}/>
+        <Stack.Screen name="Categories" component={Categories} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   )

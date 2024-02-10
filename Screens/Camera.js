@@ -59,7 +59,7 @@ const Welcome = ({ navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity style={styles.button}
         color = "#F2EFE9"
-        onPress={() => navigation.navigate('Categories', { photos })}
+        onPress={() => navigation.navigate('NutritionalGoalsPage', { photos })}
       >
       <Text style={styles.itemText}>Analyze</Text>
       </TouchableOpacity>

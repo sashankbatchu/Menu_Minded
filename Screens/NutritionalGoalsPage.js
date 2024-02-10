@@ -1,105 +1,137 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Slider, CheckBox } from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet, ScrollView } from 'react-native';
+import SelectBox from 'react-native-multi-selectbox';
+import { xorBy } from 'lodash'
 
-const NutritionalGoalsPage = () => {
-  const [sugar, setSugar] = useState(0);
-  const [protein, setProtein] = useState(0);
-  const [carbs, setCarbs] = useState(0);
-  const [fat, setFat] = useState(0);
-  const [calories, setCalories] = useState(0);
-  const [isVegetarian, setIsVegetarian] = useState(false);
-  const [isVegan, setIsVegan] = useState(false);
-  const [isGlutenFree, setIsGlutenFree] = useState(false);
 
-  const handleSubmit = () => {
-    // Handle submission of nutritional goals data
-    console.log('Submitted Nutritional Goals:', { sugar, protein, carbs, fat, calories, isVegetarian, isVegan, isGlutenFree });
-  };
+export const allergensInfo = [
+    {
+      item: 'Peanuts',
+      id: 'peanuts',
+    },
+    {
+      item: 'Tree Nuts',
+      id: 'tree_nuts',
+    },
+    {
+      item: 'Shellfish',
+      id: 'shellfish',
+    },
+    {
+      item: 'Fish',
+      id: 'fish',
+    },
+    {
+      item: 'Milk',
+      id: 'milk',
+    },
+    {
+      item: 'Eggs',
+      id: 'eggs',
+    },
+    {
+      item: 'Wheat',
+      id: 'wheat',
+    },
+    {
+      item: 'Soy',
+      id: 'soy',
+    },
+    {
+      item: 'Sesame',
+      id: 'sesame',
+    },
+    {
+      item: 'Sulfites',
+      id: 'sulfites',
+    },
+    {
+      item: 'Mustard',
+      id: 'mustard',
+    },
+    {
+      item: 'Celery',
+      id: 'celery',
+    },
+    {
+      item: 'Lupin',
+      id: 'lupin',
+    },
+    {
+      item: 'Molluscs',
+      id: 'molluscs',
+    },
+  ];
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Nutritional Goals</Text>
-      <View style={styles.inputContainer}>
-        <Text>Sugar (g): {sugar}</Text>
-        <Slider
-          style={styles.slider}
-          minimumValue={0}
-          maximumValue={100}
-          step={1}
-          value={sugar}
-          onValueChange={setSugar}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <Text>Protein (g): {protein}</Text>
-        <Slider
-          style={styles.slider}
-          minimumValue={0}
-          maximumValue={100}
-          step={1}
-          value={protein}
-          onValueChange={setProtein}
-        />
-      </View>
-      {/* Add more input fields for carbs, fat, calories, etc. */}
-      <View style={styles.checkboxContainer}>
-        <CheckBox
-          value={isVegetarian}
-          onValueChange={setIsVegetarian}
-          style={styles.checkbox}
-        />
-        <Text>Vegetarian</Text>
-      </View>
-      <View style={styles.checkboxContainer}>
-        <CheckBox
-          value={isVegan}
-          onValueChange={setIsVegan}
-          style={styles.checkbox}
-        />
-        <Text>Vegan</Text>
-      </View>
-      <View style={styles.checkboxContainer}>
-        <CheckBox
-          value={isGlutenFree}
-          onValueChange={setIsGlutenFree}
-          style={styles.checkbox}
-        />
-        <Text>Gluten-Free</Text>
-      </View>
-      <View style={styles.buttonContainer}>
+const NutritionalGoalsPage = ({ navigation }) => {
+    const [selectedAllergens, setSelectedAllergens] = useState([])
+
+    function onMultiChange() {
+        return (item) => setSelectedAllergens(xorBy(selectedAllergens, [item], 'id'))
+    }
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.headerContainer}>
+                <Text style={styles.header}>Allergens</Text>
+            </View>
+            <View style={styles.inputContainer}>
+                <SelectBox
+                    label="Select multiple"
+                    options={allergensInfo}
+                    selectedValues={selectedAllergens}
+                    onMultiSelect={onMultiChange()}
+                    onTapClose={onMultiChange()}
+                    isMulti
+                    toggleIconColor={"#568259"}
+                    searchIconColor={"#568259"}
+                    arrowIconColor={"#568259"}
+                    multiOptionContainerStyle={{ backgroundColor: "#568259"}}
+                />
+            </View>
+            <View style={styles.buttonContainer}>
               <Button title="Next" color={"#568259"} onPress={() => {navigation.navigate('AllergenPage')}}/>
-      </View>
-    </View>
-  );
+            </View>
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  slider: {
-    width: '100%',
-    height: 40,
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  checkbox: {
-    alignSelf: 'center',
-  },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#568259'
+    },
+    header: {
+        color: "#F2EFE9",
+        fontSize: 40,
+        marginBottom: 20,
+        alignItems:"flex-end"
+        
+    },
+    headerContainer: {
+        justifyContent: "flex-start"
+    },
+    inputContainer: {
+        backgroundColor: "#F2EFE9",
+        width: "85%",
+        padding: "15%",
+        borderRadius: 20,
+        height: "60%",
+        justifyContent: "center",
+        alignItems: "center",
+        marginBottom: "5%"
+    },
+    selectBox: {
+        flex: 1,
+    },
+    buttonContainer: {
+      backgroundColor: "#F2EFE9",
+      borderRadius: 25,
+      width: "25%",
+      marginTop: "7%"
+    }
 });
 
 export default NutritionalGoalsPage;
