@@ -40,27 +40,7 @@ export const allergensInfo = [
     {
       item: 'Sesame',
       id: 'sesame',
-    },
-    {
-      item: 'Sulfites',
-      id: 'sulfites',
-    },
-    {
-      item: 'Mustard',
-      id: 'mustard',
-    },
-    {
-      item: 'Celery',
-      id: 'celery',
-    },
-    {
-      item: 'Lupin',
-      id: 'lupin',
-    },
-    {
-      item: 'Molluscs',
-      id: 'molluscs',
-    },
+    }
   ];
 
 const AllergensPage = ({ navigation }) => {
