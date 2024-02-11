@@ -41,12 +41,6 @@ const Cam = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {
-    if (photos.length > 0) {
-      console.log('Photos state updated:', photos);
-    }
-  }, [photos]);
-
   if (hasCameraPermission === null) {
     return <Text>Requesting permissions...</Text>;
   } else if (hasCameraPermission === false) {
