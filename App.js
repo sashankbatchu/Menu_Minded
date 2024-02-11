@@ -9,6 +9,7 @@ import AllergenPage from './Screens/AllergenPage';
 import RestrictionsPage from './Screens/RestrictionsPage';
 import NutritionalGoalsPage from './Screens/NutritionalGoalsPage';
 import Results from './Screens/Results';
+import Test from './Screens/Test';
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
         <Stack.Screen name="RestrictionsPage" component={RestrictionsPage} options={{ headerShown: false }}/>
         <Stack.Screen name="Categories" component={Categories} options={{ headerShown: false }}/>
         <Stack.Screen name="Results" component={Results} options={{ headerShown: false }}/>
+        <Stack.Screen name="Test" component={Test} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   )
