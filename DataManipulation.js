@@ -1,4 +1,28 @@
+// import { jsonUserGoals } from './Screens/NutritionalGoalsPage';
+import retrieveAndManipulateGoalData from './Screens/retrieveAndManipulateGoalData'; // Update the path as needed
+import { getAllergens } from './Screens/allergenAsyncStorage';
+import { getRestrictions } from './Screens/restrictionsAsyncStorage';
+import { useEffect, useState } from 'react';
+import extractItemValues from './functions/extractItemValues'
+
 const manipulateData = (userJsonData) => {
+    const [userAllergensList, setUserAllergensList] = useState([""]);
+    const [userRestrictions, setUserRestrictions] = useState([""]);
+    const [wantsCarbs, setWantsCarbs] = useState(0);
+    const [wantsProtein, setWantsProtein] = useState(0);
+    const [wantsFat, setWantsFat] = useState(0);
+    const [wantsSugar, setWantsSugar] = useState(0);
+    const [wantsSodium, setWantsSodium] = useState(0);
+    const [wantsCholesterol, setWantsCholesterol] = useState(0);
+
+
+
+
+    
+
+    //let userAllergensList = [""];
+    //let userRestrictions = [""];
+
     // const data = JSON.parse(userJsonData);
     const data = userJsonData;
     const fish = ["Tilapia", "Cod", "Bass", "Swordfish", "Salmon", "Tuna", "Halibut", "Catfish", "Squid", "Calamari", "Octopus", "Scallop"];
@@ -30,10 +54,34 @@ const manipulateData = (userJsonData) => {
         "sesame": "Sesame",
     };
 
-    // Targeted towards user
-    // Combine allergens and dietary restrictions
-    const userAllergensList = ["soy"];
-    const userRestrictions = [""]; // Add your specific user restrictions here
+    // Targeted towards user -- store user information
+    // let userAllergensList = [""];
+    useEffect(() => {
+        const fetchAllergens = async () => {
+            // fetchedAllergens = await getAllergens();
+            // userAllergensList = extractItemValues(JSON.stringify(fetchedAllergens));
+            // setUserAllergensList(userAllergensList);
+            await getAllergens().then((fetchedAllergens) => {
+                setUserAllergensList(extractItemValues(JSON.stringify(fetchedAllergens)));
+            })
+        };
+        fetchAllergens()
+    }, []);
+    console.log('Allergens:', userAllergensList);
+
+    // let userRestrictions = [""]; // Add your specific user restrictions here
+    useEffect(() => {
+        const fetchRestrictions = async () => {
+            // fetchedRestrictions = await getRestrictions();
+            // userRestrictions = extractItemValues(JSON.stringify(fetchedRestrictions));
+            // setUserRestrictions(userRestrictions)
+            await getRestrictions().then((fetchedRestrictions) => {
+                setUserRestrictions(extractItemValues(JSON.stringify(fetchedRestrictions)));
+            })
+        };
+        fetchRestrictions()
+    }, []);
+    console.log('Restrictions:', userRestrictions);
 
     const dietaryRestrictionsList = userRestrictions.flatMap(restriction =>
         dietaryRestrictions[restriction.toLowerCase()] || []
@@ -42,7 +90,6 @@ const manipulateData = (userJsonData) => {
     const allergenRestrictionsList = userAllergensList.flatMap(restriction =>
         allergens[restriction.toLowerCase()] || []
     ).map(item => item.toLowerCase()); //check
-
 
     // Find all possible food items to avoid
     const allToAvoid = [...new Set(allergenRestrictionsList.concat(dietaryRestrictionsList))]; // check
@@ -60,13 +107,26 @@ const manipulateData = (userJsonData) => {
     const sodiumWeight = 0.10581162325;
     const cholesterolWeight = 0.88176352705;
 
+    // let wantsProtein = 1;
+    // let wantsCarbs = 1;
+    // let wantsFat = 1;
+    // let wantsSugar = 1;
+    // let wantsSodium = 1;
+    // let wantsCholesterol = 1;
     // Bools 1 = high, -1 = low, 0 = not specified
-    const wantsProtein = 0;
-    const wantsCarbs = 0;
-    const wantsFat = 0;
-    const wantsSugar = 1;
-    const wantsSodium = 0;
-    const wantsCholesterol = 0;
+    retrieveAndManipulateGoalData().then(manipulatedData => {
+        // Use manipulatedData here
+        setWantsProtein(manipulatedData.protein);
+        setWantsCarbs(manipulatedData.carbs);
+        setWantsFat(manipulatedData.fat);
+        setWantsSugar(manipulatedData.sugar);
+        setWantsSodium(manipulatedData.sodium);
+        setWantsCholesterol(manipulatedData.cholesterol);
+        // console.log('Manipulated data:', manipulatedData);
+    }).catch(error => {
+        console.error('Error retrieving and manipulating data:', error);
+    });
+
 
 
     // Extract nutritional values and item names, then create a 2D array

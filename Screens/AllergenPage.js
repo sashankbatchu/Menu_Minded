@@ -3,6 +3,8 @@ import { View, Text, Button, TextInput, StyleSheet, ScrollView } from 'react-nat
 import SelectBox from 'react-native-multi-selectbox';
 import { xorBy } from 'lodash'
 import RestrictionsPage from './RestrictionsPage';
+import { saveAllergens } from './allergenAsyncStorage';
+import extractItemValues from '../functions/extractItemValues';
 
 export const allergensInfo = [
     {
@@ -43,11 +45,19 @@ export const allergensInfo = [
     }
   ];
 
+
 const AllergensPage = ({ navigation }) => {
     const [selectedAllergens, setSelectedAllergens] = useState([])
+
     function onMultiChange() {
         return (item) => setSelectedAllergens(xorBy(selectedAllergens, [item], 'id'))
     }
+
+    const handleSubmit = async () => {
+      saveAllergens(selectedAllergens);
+      navigation.navigate('RestrictionsPage')
+
+  }
 
     return (
         <View style={styles.container}>
@@ -69,7 +79,7 @@ const AllergensPage = ({ navigation }) => {
                 />
             </View>
             <View style={styles.buttonContainer}>
-              <Button title="Next" color={"#568259"} onPress={() => {navigation.navigate('RestrictionsPage')}}/>
+              <Button title="Next" color={"#568259"} onPress={handleSubmit}/>
             </View>
         </View>
     );

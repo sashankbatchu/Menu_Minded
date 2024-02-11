@@ -3,6 +3,8 @@ import { View, Text, Button, TextInput, StyleSheet, ScrollView } from 'react-nat
 import SelectBox from 'react-native-multi-selectbox';
 import { xorBy } from 'lodash'
 import Categories from './Categories';
+import { saveRestrictions } from './restrictionsAsyncStorage';
+import AllergensPage from './AllergenPage';
 
 
 export const restrictionsInfo = [
@@ -19,8 +21,8 @@ export const restrictionsInfo = [
         id: 'Kosher',
     },
     {
-        item: 'Vegeterian',
-        id: 'vegeterian',
+        item: 'Vegetarian',
+        id: 'vegetarian',
       },
       {
         item: 'Vegan',
@@ -39,10 +41,15 @@ export const restrictionsInfo = [
 
 const RestrictionsPage = ({ navigation }) => {
     const [selectedRestrictions, setSelectedRestrictions] = useState([])
+
     function onMultiChange() {
         return (item) => setSelectedRestrictions(xorBy(selectedRestrictions, [item], 'id'))
     }
 
+    const handleSubmit = () => {
+        saveRestrictions(selectedRestrictions);
+        navigation.navigate('Categories')
+    }
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
@@ -63,7 +70,7 @@ const RestrictionsPage = ({ navigation }) => {
                 />
             </View>
             <View style={styles.buttonContainer}>
-              <Button title="Submit" color={"#568259"} onPress={() => {navigation.navigate('Categories')}}/>
+              <Button title="Submit" color={"#568259"} onPress={handleSubmit}/>
             </View>
         </View>
     );

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, TextInput, StyleSheet, ScrollView } from 'react-native';
 import userNutritionAnalysis from '../userNutritionAnalysis';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export let jsonUserGoals;
+let jsonUserGoals;
 
 const NutritionalGoalsPage = ({ navigation }) => {
     const [userGoals, setUserGoals] = useState('');
@@ -12,11 +13,20 @@ const NutritionalGoalsPage = ({ navigation }) => {
         console.log("running")
         userNutritionAnalysis(userGoals).then(analyzedUserGoals => {
             jsonUserGoals = JSON.parse(analyzedUserGoals);
+            AsyncStorage.setItem('userGoals', JSON.stringify(jsonUserGoals))
+                .then(() => {
+                    console.log('jsonUserGoals saved successfully');
+                })
+                .catch(error => {
+                    console.error('Error saving jsonUserGoals:', error);
+                });
+
             navigation.navigate('AllergenPage')
+
         }).catch(error => {
             console.error("Error generating text:", error);
         });
-       
+
     }
 
     return (
@@ -80,6 +90,8 @@ const styles = StyleSheet.create({
         marginTop: "7%"
     }
 });
+
+// export { jsonUserGoals };
 
 export default NutritionalGoalsPage;
 
