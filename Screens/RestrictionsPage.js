@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, Button, TextInput, StyleSheet, ScrollView } from 'react-native';
 import SelectBox from 'react-native-multi-selectbox';
 import { xorBy } from 'lodash'
+import Categories from './Categories';
 
 
-export const allergensInfo = [
+export const restrictionsInfo = [
     {
         item: 'Jain',
         id: 'jain',
@@ -32,13 +33,12 @@ export const allergensInfo = [
       {
         item: 'Lactose Intolerant',
         id: 'lactoseIntolerant',
-      },
+      }
       
 ];
 
-const RestrictionsPage = ({ navigation, route }) => {
+const RestrictionsPage = ({ navigation }) => {
     const [selectedRestrictions, setSelectedRestrictions] = useState([])
-    const { photos } = route.params;
     function onMultiChange() {
         return (item) => setSelectedRestrictions(xorBy(selectedRestrictions, [item], 'id'))
     }
@@ -46,12 +46,12 @@ const RestrictionsPage = ({ navigation, route }) => {
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
-                <Text style={styles.header}>Other Restrictions</Text>
+                <Text style={styles.header}>Restrictions</Text>
             </View>
             <View style={styles.inputContainer}>
                 <SelectBox
                     label="Select multiple"
-                    options={allergensInfo}
+                    options={restrictionsInfo}
                     selectedValues={selectedRestrictions}
                     onMultiSelect={onMultiChange()}
                     onTapClose={onMultiChange()}
@@ -59,11 +59,11 @@ const RestrictionsPage = ({ navigation, route }) => {
                     toggleIconColor={"#568259"}
                     searchIconColor={"#568259"}
                     arrowIconColor={"#568259"}
-                    multiOptionContainerStyle={{ backgroundColor: "#568259" }}
+                    multiOptionContainerStyle={{ backgroundColor: "#568259"}}
                 />
             </View>
             <View style={styles.buttonContainer}>
-                <Button title="Submit" color={"#568259"} onPress={() => {navigation.navigate("Categories", {photos})}} />
+              <Button title="Submit" color={"#568259"} onPress={() => {navigation.navigate('Categories')}}/>
             </View>
         </View>
     );
@@ -80,8 +80,8 @@ const styles = StyleSheet.create({
         color: "#F2EFE9",
         fontSize: 40,
         marginBottom: 20,
-        alignItems: "flex-end"
-
+        alignItems:"flex-end"
+        
     },
     headerContainer: {
         justifyContent: "flex-start"
@@ -100,10 +100,10 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     buttonContainer: {
-        backgroundColor: "#F2EFE9",
-        borderRadius: 25,
-        width: "25%",
-        marginTop: "7%"
+      backgroundColor: "#F2EFE9",
+      borderRadius: 25,
+      width: "25%",
+      marginTop: "7%"
     }
 });
 

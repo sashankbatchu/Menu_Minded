@@ -3,9 +3,8 @@ import { View, FlatList, Text, StyleSheet, TouchableOpacity, Image } from 'react
 import Results from './Results';
 import Cam from './Cam';
 
-const Categories = ({ navigation, route }) => {
+const Categories = ({ navigation }) => {
   const [data, setData] = useState(Array.from({ length: 4 }, (_, index) => ({ id: index, text: `Item ${index + 1}` })));
-  const { photos } = route.params;
   const renderItem = ({ item }) => (
     <TouchableOpacity 
       style={styles.item} 

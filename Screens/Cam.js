@@ -62,7 +62,7 @@ const Cam = ({ navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('NutritionalGoalsPage', { photos })}
+        onPress={() => navigation.navigate('NutritionalGoalsPage')}
         disabled={photos.length === 0}
       >
         <Text style={styles.itemText}>Analyze</Text>
