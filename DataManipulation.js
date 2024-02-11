@@ -15,11 +15,6 @@ const manipulateData = (userJsonData) => {
     const [wantsSodium, setWantsSodium] = useState(0);
     const [wantsCholesterol, setWantsCholesterol] = useState(0);
 
-
-
-
-    
-
     //let userAllergensList = [""];
     //let userRestrictions = [""];
 

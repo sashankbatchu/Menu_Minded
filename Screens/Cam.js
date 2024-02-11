@@ -2,11 +2,33 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, Button, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as FileSystem from 'expo-file-system';
+import userPhotoAnalysis from '../userPhotoAnalysis';
+import combineItems from '../functions/combineItems';
 
 const Cam = ({ navigation }) => {
   const cameraRef = useRef();
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [photos, setPhotos] = useState([]);
+  let test = [];
+
+  const handleAnalyzeSubmit = async () => {
+    console.log("button working");
+    try {
+      userPhotoAnalysis().then((data) => {
+        test=data;
+        const a = combineItems(test);
+        console.log(data);
+        console.log(a);
+        navigation.navigate('NutritionalGoalsPage');
+      });
+  
+    } catch (error) {
+      console.error("Error analyzing photo:", error);
+      // Handle error if necessary
+    }
+  };
+  
+
 
   useEffect(() => {
     (async () => {
@@ -27,12 +49,13 @@ const Cam = ({ navigation }) => {
         let newPhoto = await cameraRef.current.takePictureAsync(options);
 
         // Save the picture to the app's file system with a fixed filename
-        const photoPath = `${FileSystem.documentDirectory}photo.jpg`;
+        const photoPath = `${FileSystem.documentDirectory}photo.png`;
         await FileSystem.moveAsync({
           from: newPhoto.uri,
           to: photoPath,
-        });
-
+        })
+        
+        console.log(photoPath);
         // Update the state with the saved file path
         setPhotos([photoPath]);
       } catch (error) {
@@ -62,7 +85,7 @@ const Cam = ({ navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('NutritionalGoalsPage')}
+        onPress={handleAnalyzeSubmit}
         disabled={photos.length === 0}
       >
         <Text style={styles.itemText}>Analyze</Text>
