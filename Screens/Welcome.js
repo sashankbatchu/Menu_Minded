@@ -5,10 +5,6 @@ import manipulateData from '../DataManipulation';
 import userNutritionAnalysis from '../userNutritionAnalysis';
 
 const Welcome = ({ navigation }) => {
-  const testUserInput = "I want to eat more protein and less sugar."
-  const test =  userNutritionAnalysis(testUserInput)
-  console.log(test)
-
   const userJsonData = [
     {
       "name": "Ice Cream",
@@ -44,8 +40,6 @@ const Welcome = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>MenuApp</Text>
       <Text>{resultJson}</Text>
-      <Text style={styles.title}>{test}</Text>
-
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
