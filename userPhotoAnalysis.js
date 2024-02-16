@@ -28,7 +28,7 @@ async function run(input, isSectionFinder) {
   
 
   
-  const imageParts = await fileToGenerativePart("file:///var/mobile/Containers/Data/Application/F00B28C0-0B00-4C99-8046-2DA60B9CF584/Documents/ExponentExperienceData/@anonymous/MenuApp-bcf1cea5-69f0-4ead-b62a-8a064b69f6b6/photo.png", "image/png");
+  const imageParts = await fileToGenerativePart(`${FileSystem.documentDirectory}photo.png`, "image/png");
   
   //console.log(imageParts);
     // fileToGenerativePart("file:///var/mobile/Containers/Data/Application/F00B28C0-0B00-4C99-8046-2DA60B9CF584/Documents/ExponentExperienceData/@anonymous/MenuApp-bcf1cea5-69f0-4ead-b62a-8a064b69f6b6/photo.jpg", "image/jpeg"),

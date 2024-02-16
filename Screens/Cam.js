@@ -4,31 +4,41 @@ import { Camera } from 'expo-camera';
 import * as FileSystem from 'expo-file-system';
 import userPhotoAnalysis from '../userPhotoAnalysis';
 import combineItems from '../functions/combineItems';
+import { saveProcessedMenuData } from './menuDataAsyncStorage';
 
 const Cam = ({ navigation }) => {
   const cameraRef = useRef();
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [photos, setPhotos] = useState([]);
-  let test = [];
+  let initialMenuData = [];
+
+  let temp = [];
+  const [processedMenuData, setProcessedMenuData]= useState(null);
+
 
   const handleAnalyzeSubmit = async () => {
-    console.log("button working");
-    try {
-      userPhotoAnalysis().then((data) => {
-        test=data;
-        const a = combineItems(test);
-        console.log(data);
-        console.log(a);
-        navigation.navigate('NutritionalGoalsPage');
-      });
-  
-    } catch (error) {
-      console.error("Error analyzing photo:", error);
-      // Handle error if necessary
+    console.log("analyze button working");
+    // try {
+    //   userPhotoAnalysis().then((data) => {
+    //     initialMenuData=data;
+    //     console.log(data);
+    //     temp = combineItems(initialMenuData);
+    //     console.log(temp);
+    //   });
+    // } catch (error) {
+    //   console.error("Error analyzing photo:", error);
+    //   // Handle error if necerssary
+    // }
+    if (processedMenuData !== null) {
+      console.log(processedMenuData);
+      saveProcessedMenuData(processedMenuData);
+      navigation.navigate('NutritionalGoalsPage');
+    } else {
+      alert("Loading")
     }
+
   };
   
-
 
   useEffect(() => {
     (async () => {
@@ -58,6 +68,19 @@ const Cam = ({ navigation }) => {
         console.log(photoPath);
         // Update the state with the saved file path
         setPhotos([photoPath]);
+
+
+        //new additions / testing
+        console.log("about to run photo analysis")
+        userPhotoAnalysis().then((data) => {
+          console.log("about to retrieve menu data")
+          initialMenuData=data
+          console.log("retrieved menu data")
+          console.log(initialMenuData);
+          temp = combineItems(initialMenuData)
+          setProcessedMenuData(temp);
+        })
+        
       } catch (error) {
         console.error('Error taking picture:', error);
       }

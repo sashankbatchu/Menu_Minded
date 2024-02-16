@@ -5,15 +5,52 @@ import { getRestrictions } from './Screens/restrictionsAsyncStorage';
 import { useEffect, useState } from 'react';
 import extractItemValues from './functions/extractItemValues'
 
-const manipulateData = (userJsonData) => {
-    const [userAllergensList, setUserAllergensList] = useState([""]);
-    const [userRestrictions, setUserRestrictions] = useState([""]);
+const manipulateData = async (userJsonData) => {
+    // const [userAllergensList, setUserAllergensList] = useState([""]);
+    // const [userRestrictions, setUserRestrictions] = useState([""]);
+    let userAllergensList;
+    let userRestrictions;
+    let userData = userJsonData;
+    console.log("userData", userData)
+
+   
+    useEffect(() => {
+        const fetchAllergensAndRestrictions = async () => {
+            const fetchedAllergens = await getAllergens();
+            userAllergensList = extractItemValues(JSON.stringify(fetchedAllergens));
+
+            const fetchedRestrictions = await getRestrictions();
+            userRestrictions = extractItemValues(JSON.stringify(fetchedRestrictions));
+
+            handleFetchedData(userAllergensList, userRestrictions);
+            
+        };
+
+        fetchAllergensAndRestrictions();
+    }, []);
+
+    const handleFetchedData = (allergens, restrictions) => {
+        console.log("Allergen1", allergens);
+        console.log("restrictions1", restrictions);
+        console.log(userData)
+        console.log("running function")
+        return actuallyManipulateData(userData, allergens, restrictions);
+
+    };
+
+}
+
+
+const actuallyManipulateData = (userJsonData, userAllergensList, userRestrictions) => {
+    // const [userAllergensList, setUserAllergensList] = useState([""]);
+    // const [userRestrictions, setUserRestrictions] = useState([""]);
     const [wantsCarbs, setWantsCarbs] = useState(0);
     const [wantsProtein, setWantsProtein] = useState(0);
     const [wantsFat, setWantsFat] = useState(0);
     const [wantsSugar, setWantsSugar] = useState(0);
     const [wantsSodium, setWantsSodium] = useState(0);
     const [wantsCholesterol, setWantsCholesterol] = useState(0);
+
 
     //let userAllergensList = [""];
     //let userRestrictions = [""];
@@ -50,41 +87,40 @@ const manipulateData = (userJsonData) => {
     };
 
     // Targeted towards user -- store user information
-    // let userAllergensList = [""];
-    useEffect(() => {
-        const fetchAllergens = async () => {
-            // fetchedAllergens = await getAllergens();
-            // userAllergensList = extractItemValues(JSON.stringify(fetchedAllergens));
-            // setUserAllergensList(userAllergensList);
-            await getAllergens().then((fetchedAllergens) => {
-                setUserAllergensList(extractItemValues(JSON.stringify(fetchedAllergens)));
-            })
-        };
-        fetchAllergens()
-    }, []);
-    console.log('Allergens:', userAllergensList);
 
-    // let userRestrictions = [""]; // Add your specific user restrictions here
-    useEffect(() => {
-        const fetchRestrictions = async () => {
-            // fetchedRestrictions = await getRestrictions();
-            // userRestrictions = extractItemValues(JSON.stringify(fetchedRestrictions));
-            // setUserRestrictions(userRestrictions)
-            await getRestrictions().then((fetchedRestrictions) => {
-                setUserRestrictions(extractItemValues(JSON.stringify(fetchedRestrictions)));
-            })
-        };
-        fetchRestrictions()
-    }, []);
-    console.log('Restrictions:', userRestrictions);
+    
+    
+
+
+    // useEffect(() => {
+    //     const fetchAllergensandRestrictions = async () => {
+    //         await getAllergens().then((fetchedAllergens) => {
+    //             setUserAllergensList(JSON.stringify(fetchedAllergens));
+
+    //         })
+    //         await getRestrictions().then((fetchedRestrictions) => {
+    //             setUserRestrictions(extractItemValues(JSON.stringify(fetchedRestrictions)));
+
+    //         })
+    
+    //     };
+    //     fetchAllergensandRestrictions();
+    // }, []);
+
+    // useEffect(() => {
+    //     console.log("are they even changing?")
+    //     console.log('Allergens2:', userAllergensList);
+    //     console.log('Restrictions2:', userRestrictions);
+    // }, [userAllergensList, userRestrictions])
+   
 
     const dietaryRestrictionsList = userRestrictions.flatMap(restriction =>
         dietaryRestrictions[restriction.toLowerCase()] || []
-    ).map(item => item.toLowerCase()); //checl
+    ).map(item => item.toLowerCase()); 
 
     const allergenRestrictionsList = userAllergensList.flatMap(restriction =>
         allergens[restriction.toLowerCase()] || []
-    ).map(item => item.toLowerCase()); //check
+    ).map(item => item.toLowerCase()); 
 
     // Find all possible food items to avoid
     const allToAvoid = [...new Set(allergenRestrictionsList.concat(dietaryRestrictionsList))]; // check
@@ -92,7 +128,7 @@ const manipulateData = (userJsonData) => {
     const filteredMenuItems = data.filter(item => {
         const ingredients = item.ingredients.toLowerCase().split(', ');
         return !ingredients.some(ingredient => allToAvoid.includes(ingredient));
-    }); //check
+    }); 
 
     // Weights
     const proteinWeight = 0.00176352705;
@@ -157,13 +193,13 @@ const manipulateData = (userJsonData) => {
         for (let i = 1; i < headers.length - 1; i++) {
             resultDict[headers[i]] = row[i];
         }
-        resultDict["score"] = row[row.length - 1];
+        resultDict["score"] = row[7];
         return resultDict;
     }); // check this shit
 
     // Convert the list of dictionaries to JSON
-    const resultJson = JSON.stringify(resultList, null, 2);
-    return resultJson;
+    // const resultJson = JSON.stringify(resultList, null, 2);
+    return resultList;
 }
 
 export default manipulateData;

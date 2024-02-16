@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import Results from './Results';
-import Cam from './Cam';
-import manipulateData from '../DataManipulation'
-
+import { getProcessedMenuData } from './menuDataAsyncStorage';
+import manipulateData from '../DataManipulation';
 const Categories = ({ navigation }) => {
   const [data, setData] = useState(Array.from({ length: 4 }, (_, index) => ({ id: index, text: `Item ${index + 1}` })));
   const renderItem = ({ item }) => (
@@ -15,37 +13,61 @@ const Categories = ({ navigation }) => {
       <Text style={styles.itemText}>{item.text}</Text>
     </TouchableOpacity>
   );
-  // <Image style={styles.preview} source={{ uri: photos[0]}} />
 
-  const userJsonData = [
-    {
-      "name": "Ice Cream",
-      "nutritionalValues": {
-        "protein": "2",
-        "carbs": "20",
-        "fat": "10",
-        "sugar": "10",
-        "sodium": "0.05",
-        "cholesterol": "0.01"
+  const [processedMenuData, setProcessedMenuData] = useState([""]);
+
+  useEffect(() => {
+    const fetchMenuData = async () => {
+        // fetchedRestrictions = await getRestrictions();
+        // userRestrictions = extractItemValues(JSON.stringify(fetchedRestrictions));
+        // setUserRestrictions(userRestrictions)
+        await getProcessedMenuData().then((fetchMenuData) => {
+            setProcessedMenuData(JSON.stringify(fetchMenuData));
+        })
+    };
+    fetchMenuData();
+}, []);
+
+
+    const manipulatedData = manipulateData(processedMenuData);
+    console.log("Manipulated Data", manipulatedData);
+
+
+// console.log('Processed Data2:', processedMenuData);
+
+//uncomment in a lil
+// const manipulatedData = manipulateData(processedMenuData);
+// console.log("Manipulated Data", manipulatedData);
+
+  // const userJsonData = [
+  //   {
+  //     "name": "Ice Cream",
+  //     "nutritionalValues": {
+  //       "protein": "2",
+  //       "carbs": "20",
+  //       "fat": "10",
+  //       "sugar": "10",
+  //       "sodium": "0.05",
+  //       "cholesterol": "0.01"
         
-      },
-      "ingredients": "Milk, cream, sugar, flavoring."
-    },
-    {
-      "name": "Chicken Nuggets",
-      "nutritionalValues": {
-        "protein": "15",
-        "carbs": "10",
-        "fat": "5",
-        "sugar": "0.2",
-        "sodium": "0.2",
-        "cholesterol": "0.035"
+  //     },
+  //     "ingredients": "Milk, cream, sugar, flavoring."
+  //   },
+  //   {
+  //     "name": "Chicken Nuggets",
+  //     "nutritionalValues": {
+  //       "protein": "15",
+  //       "carbs": "10",
+  //       "fat": "5",
+  //       "sugar": "0.2",
+  //       "sodium": "0.2",
+  //       "cholesterol": "0.035"
         
-      },
-      "ingredients": "Chicken, breading, oil."
-    }
-  ];
-  const resultJson = manipulateData(userJsonData); // Call the function
+  //     },
+  //     "ingredients": "Chicken, breading, oil."
+  //   }
+  // ];
+  // const resultJson = manipulateData(userJsonData); // Call the function
 
   return (
     <View style={styles.container}>
@@ -55,7 +77,7 @@ const Categories = ({ navigation }) => {
         renderItem={renderItem}
         numColumns={2}
       />
-      <Text>{resultJson}</Text>
+      <Text>{processedMenuData}</Text>
     </View>
   );
 };

@@ -1,8 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import Cam from './Cam';
-import manipulateData from '../DataManipulation';
-import userNutritionAnalysis from '../userNutritionAnalysis';
 
 const Welcome = ({ navigation }) => {
   const userJsonData = [
@@ -34,12 +31,10 @@ const Welcome = ({ navigation }) => {
     }
   ];
   
-  const resultJson = manipulateData(userJsonData); // Call the function
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>MenuApp</Text>
-      <Text>{resultJson}</Text>
       <TouchableOpacity
         style={styles.button}
         onPress={() => {

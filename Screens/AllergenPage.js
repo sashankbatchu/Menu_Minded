@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Button, TextInput, StyleSheet, ScrollView } from 'react-native';
 import SelectBox from 'react-native-multi-selectbox';
 import { xorBy } from 'lodash'
-import RestrictionsPage from './RestrictionsPage';
 import { saveAllergens } from './allergenAsyncStorage';
-import extractItemValues from '../functions/extractItemValues';
 
 export const allergensInfo = [
     {
@@ -56,8 +54,7 @@ const AllergensPage = ({ navigation }) => {
     const handleSubmit = async () => {
       saveAllergens(selectedAllergens);
       navigation.navigate('RestrictionsPage')
-
-  }
+    } 
 
     return (
         <View style={styles.container}>

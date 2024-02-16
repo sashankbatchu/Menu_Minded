@@ -1,12 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Button, TextInput, StyleSheet, ScrollView } from 'react-native';
 import SelectBox from 'react-native-multi-selectbox';
 import { xorBy } from 'lodash'
-import Categories from './Categories';
 import { saveRestrictions } from './restrictionsAsyncStorage';
-import AllergensPage from './AllergenPage';
-
-
 export const restrictionsInfo = [
     {
         item: 'Jain',
@@ -50,6 +46,7 @@ const RestrictionsPage = ({ navigation }) => {
         saveRestrictions(selectedRestrictions);
         navigation.navigate('Categories')
     }
+
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
