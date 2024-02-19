@@ -1,22 +1,57 @@
-import React, { useState } from 'react';
 import { View, FlatList, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import manipulateData from '../DataManipulation';
 
-const Results = () => {
-  const [data, setData] = useState(Array.from({ length: 3 }, (_, index) => ({ id: index, text: `Item ${index + 1}` })));
+const Results = ({ navigation }) => {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.item}>
-      <Text style={styles.itemText}>{item.text}</Text>
+      <Text style={styles.itemText}>
+        {Object.entries(item).map(([key, value]) => `${key}: ${value}`).join(', ')}
+      </Text>
     </TouchableOpacity>
   );
+
+
+  let processedMenuData;
+  let manipulatedData;
+
+  const fetchMenuData = async () => {
+    // fetchedRestrictions = await getRestrictions();
+    // userRestrictions = extractItemValues(JSON.stringify(fetchedRestrictions));
+    // setUserRestrictions(userRestrictions)
+    const fetchedMenuData = await getProcessedMenuData();
+    processedMenuData = JSON.stringify(fetchedMenuData);
+
+    doDataManipulation();
+  };
+  fetchMenuData();
+
+  doDataManipulation = async () => {
+
+    console.log("mandata running")
+    manipulatedData = await manipulateData(processedMenuData);
+
+    console.log("Manipulated Data", manipulatedData);
+
+  }
+  //Nutritional Values: {Object.entries(item.nutritionalValues).map(([key, value]) => `${key}: ${value}`).join(', ')}
+
+
+  if (!manipulatedData || Object.keys(manipulatedData).length === 0) {
+    // Render loading state while waiting for data
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={data}
-        keyExtractor={(item) => item.id.toString()}
+        data={Object.values(manipulatedData)}
         renderItem={renderItem}
-        numColumns={1}
+        keyExtractor={item => item.name}
       />
     </View>
   );
@@ -30,7 +65,7 @@ const styles = StyleSheet.create({
   },
   item: {
     width: 353,
-    height: 353,
+    height: 150,
     margin: 10,
     backgroundColor: '#568259',
     borderRadius: 25,
@@ -40,6 +75,7 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 20,
     color: '#F2EFE9',
+    textAlign: 'center',
   },
 });
 

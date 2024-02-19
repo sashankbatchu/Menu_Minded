@@ -2,82 +2,38 @@ import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { getProcessedMenuData } from './menuDataAsyncStorage';
 import manipulateData from '../DataManipulation';
-const Categories = ({ navigation }) => {
-  const [data, setData] = useState(Array.from({ length: 4 }, (_, index) => ({ id: index, text: `Item ${index + 1}` })));
-  const renderItem = ({ item }) => (
-    <TouchableOpacity 
-      style={styles.item} 
-      onPress={() => {
-        navigation.navigate('Results')
-      }}>
-      <Text style={styles.itemText}>{item.text}</Text>
-    </TouchableOpacity>
-  );
 
-  const [processedMenuData, setProcessedMenuData] = useState([""]);
+Categories = ({ navigation }) => {
+
+  const [manipulatedData, setManipulatedData] = useState(null);
 
   useEffect(() => {
-    const fetchMenuData = async () => {
-        // fetchedRestrictions = await getRestrictions();
-        // userRestrictions = extractItemValues(JSON.stringify(fetchedRestrictions));
-        // setUserRestrictions(userRestrictions)
-        await getProcessedMenuData().then((fetchMenuData) => {
-            setProcessedMenuData(JSON.stringify(fetchMenuData));
-        })
+    const fetchDataAndManipulate = async () => {
+      try {
+        const fetchedMenuData = await getProcessedMenuData();
+        const processedMenuData = JSON.stringify(fetchedMenuData);
+        const newData = await manipulateData(processedMenuData);
+        setManipulatedData(newData);
+      } catch (error) {
+        console.error("Error fetching/manipulating data:", error);
+      }
     };
-    fetchMenuData();
-}, []);
 
+    fetchDataAndManipulate();
+  }, []);
+  return (
+    <View style={styles.container}>
+      <OutputData manipulatedData={manipulatedData} />
+    </View>
+  );
+};
 
-    const manipulatedData = manipulateData(processedMenuData);
-    console.log("Manipulated Data", manipulatedData);
-
-
-// console.log('Processed Data2:', processedMenuData);
-
-//uncomment in a lil
-// const manipulatedData = manipulateData(processedMenuData);
-// console.log("Manipulated Data", manipulatedData);
-
-  // const userJsonData = [
-  //   {
-  //     "name": "Ice Cream",
-  //     "nutritionalValues": {
-  //       "protein": "2",
-  //       "carbs": "20",
-  //       "fat": "10",
-  //       "sugar": "10",
-  //       "sodium": "0.05",
-  //       "cholesterol": "0.01"
-        
-  //     },
-  //     "ingredients": "Milk, cream, sugar, flavoring."
-  //   },
-  //   {
-  //     "name": "Chicken Nuggets",
-  //     "nutritionalValues": {
-  //       "protein": "15",
-  //       "carbs": "10",
-  //       "fat": "5",
-  //       "sugar": "0.2",
-  //       "sodium": "0.2",
-  //       "cholesterol": "0.035"
-        
-  //     },
-  //     "ingredients": "Chicken, breading, oil."
-  //   }
-  // ];
-  // const resultJson = manipulateData(userJsonData); // Call the function
+const OutputData = ({ manipulatedData }) => {
+  console.log("manipulatedData", manipulatedData);
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderItem}
-        numColumns={2}
-      />
-      <Text>{processedMenuData}</Text>
+      <Text>{JSON.stringify(manipulatedData)}</Text>
     </View>
   );
 };
@@ -115,5 +71,4 @@ const styles = StyleSheet.create({
     color: '#F2EFE9',
   },
 });
-
 export default Categories;

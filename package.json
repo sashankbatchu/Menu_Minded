@@ -16,8 +16,8 @@
     "base64-js": "^1.5.1",
     "dotenv": "^16.4.2",
     "expo": "~50.0.6",
-    "expo-camera": "~14.0.4",
-    "expo-font": "~11.10.2",
+    "expo-camera": "~14.0.5",
+    "expo-font": "~11.10.3",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
     "react-native": "0.73.4",
@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@react-native-async-storage/async-storage": "^1.21.0",
+    "@react-native-async-storage/async-storage": "1.21.0",
     "metro-react-native-babel-preset": "^0.77.0",
     "react-native-dotenv": "^3.4.9"
   },

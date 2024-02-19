@@ -42,8 +42,8 @@ const RestrictionsPage = ({ navigation }) => {
         return (item) => setSelectedRestrictions(xorBy(selectedRestrictions, [item], 'id'))
     }
 
-    const handleSubmit = () => {
-        saveRestrictions(selectedRestrictions);
+    handleSubmit = async () => {
+        await saveRestrictions(selectedRestrictions);
         navigation.navigate('Categories')
     }
 

@@ -1,67 +1,94 @@
-// import { jsonUserGoals } from './Screens/NutritionalGoalsPage';
 import retrieveAndManipulateGoalData from './Screens/retrieveAndManipulateGoalData'; // Update the path as needed
 import { getAllergens } from './Screens/allergenAsyncStorage';
 import { getRestrictions } from './Screens/restrictionsAsyncStorage';
 import { useEffect, useState } from 'react';
 import extractItemValues from './functions/extractItemValues'
 
-const manipulateData = async (userJsonData) => {
+manipulateData = async (userJsonData) => {
     // const [userAllergensList, setUserAllergensList] = useState([""]);
     // const [userRestrictions, setUserRestrictions] = useState([""]);
     let userAllergensList;
     let userRestrictions;
-    let userData = userJsonData;
-    console.log("userData", userData)
+    let wantsCarbs = 0; 
+    let wantsProtein = 0; 
+    let wantsFat = 0;
+    let wantsSugar = 0; 
+    let wantsSodium = 0;
+    let wantsCholesterol = 0;
 
+    console.log("userJsonData1", userJsonData)
+    let toReturn;
    
-    useEffect(() => {
-        const fetchAllergensAndRestrictions = async () => {
+    // useEffect(() => {
+
             const fetchedAllergens = await getAllergens();
             userAllergensList = extractItemValues(JSON.stringify(fetchedAllergens));
 
             const fetchedRestrictions = await getRestrictions();
             userRestrictions = extractItemValues(JSON.stringify(fetchedRestrictions));
 
-            handleFetchedData(userAllergensList, userRestrictions);
-            
-        };
 
-        fetchAllergensAndRestrictions();
-    }, []);
+            const retrievedManipulatedData = await retrieveAndManipulateGoalData();
+            // Use manipulatedData here
+                wantsProtein = retrievedManipulatedData.protein;
+                wantsCarbs = retrievedManipulatedData.carbs;
+                wantsFat = retrievedManipulatedData.fat;
+                wantsSugar = retrievedManipulatedData.sugar;
+                wantsSodium = retrievedManipulatedData.sodium;
+                wantsCholesterol = retrievedManipulatedData.cholesterol;
+                // console.log('Manipulated data:', manipulatedData);
+                toReturn = actuallyManipulateData(userJsonData, userAllergensList, userRestrictions, wantsProtein, wantsCarbs, wantsFat, wantsSugar, wantsSodium, wantsCholesterol);
+                console.log("toreturn", toReturn);
 
-    const handleFetchedData = (allergens, restrictions) => {
-        console.log("Allergen1", allergens);
-        console.log("restrictions1", restrictions);
-        console.log(userData)
-        console.log("running function")
-        return actuallyManipulateData(userData, allergens, restrictions);
+         return toReturn;        
 
-    };
+    // }, []);
 
+    // handleFetchedData = (allergens, restrictions, wantsProtein, wantsCarbs, wantsFat, wantsSugar, wantsSodium, wantsCholesterol) => {
+    //     console.log("Allergen1", allergens);
+    //     console.log("restrictions1", restrictions);
+    //     console.log("wantsProtein", wantsProtein)
+    //     console.log("wantsCarbs" ,wantsCarbs)
+    //     console.log("wantsFat", wantsFat)
+    //     console.log("wantsSugar", wantsSugar)
+    //     console.log("wantsSodium", wantsSodium)
+    //     console.log("wantsCholesterol", wantsCholesterol)
+    //     console.log("running function")
+    //     toReturn = actuallyManipulateData(userJsonData, allergens, restrictions, wantsProtein, wantsCarbs, wantsFat, wantsSugar, wantsSodium, wantsCholesterol);
+    //     console.log("toreturn", toReturn);
+    //     return toReturn
+    // };
 }
 
 
-const actuallyManipulateData = (userJsonData, userAllergensList, userRestrictions) => {
+const actuallyManipulateData = (userJsonData, userAllergensList, userRestrictions, wantsProtein, wantsCarbs, wantsFat, wantsSugar, wantsSodium, wantsCholesterol) => {
+    console.log("actuallymanipulatdata is running")
     // const [userAllergensList, setUserAllergensList] = useState([""]);
     // const [userRestrictions, setUserRestrictions] = useState([""]);
-    const [wantsCarbs, setWantsCarbs] = useState(0);
-    const [wantsProtein, setWantsProtein] = useState(0);
-    const [wantsFat, setWantsFat] = useState(0);
-    const [wantsSugar, setWantsSugar] = useState(0);
-    const [wantsSodium, setWantsSodium] = useState(0);
-    const [wantsCholesterol, setWantsCholesterol] = useState(0);
+    
+    console.log("userAllergenList2", userAllergensList)
+    console.log("userjsondata2", userJsonData)
+    console.log("userRestrictions2", userRestrictions)
+
+    // const [wantsCarbs, setWantsCarbs] = useState(0);
+    // const [wantsProtein, setWantsProtein] = useState(0);
+    // const [wantsFat, setWantsFat] = useState(0);
+    // const [wantsSugar, setWantsSugar] = useState(0);
+    // const [wantsSodium, setWantsSodium] = useState(0);
+    // const [wantsCholesterol, setWantsCholesterol] = useState(0);
 
 
     //let userAllergensList = [""];
     //let userRestrictions = [""];
 
     // const data = JSON.parse(userJsonData);
-    const data = userJsonData;
     const fish = ["Tilapia", "Cod", "Bass", "Swordfish", "Salmon", "Tuna", "Halibut", "Catfish", "Squid", "Calamari", "Octopus", "Scallop"];
     const lactoseIntolerant = ["Milk", "Cheese", "Yogurt", "Butter", "Ice Cream"];
     const eggFree = ["Whole Eggs", "Egg Whites", "Mayonnaise"];
     const shellfishFree = ["Shrimp", "Crab", "Lobster", "Clams", "Mussels", "Oyster"];
     const halal = ["Beef", "Chicken", "Pork", "Lamb", "Turkey", "Duck", "Mutton", "Steak", "Ham", "Gelatin"];
+
+    console.log("halal", halal);
 
     const dietaryRestrictions = {
         "vegetarian": shellfishFree.concat(halal, fish),
@@ -72,6 +99,9 @@ const actuallyManipulateData = (userJsonData, userAllergensList, userRestriction
         "kosher": ["Pork"].concat(shellfishFree),
         "halal": halal
     };
+
+    console.log("dietaryRestrictions", dietaryRestrictions);
+
 
     // Allergen info
     const allergens = {
@@ -86,11 +116,10 @@ const actuallyManipulateData = (userJsonData, userAllergensList, userRestriction
         "sesame": "Sesame",
     };
 
+    console.log("allergens", allergens);
+
+
     // Targeted towards user -- store user information
-
-    
-    
-
 
     // useEffect(() => {
     //     const fetchAllergensandRestrictions = async () => {
@@ -118,17 +147,30 @@ const actuallyManipulateData = (userJsonData, userAllergensList, userRestriction
         dietaryRestrictions[restriction.toLowerCase()] || []
     ).map(item => item.toLowerCase()); 
 
+    console.log("dietaryRestrictionsList", dietaryRestrictionsList);
+
     const allergenRestrictionsList = userAllergensList.flatMap(restriction =>
         allergens[restriction.toLowerCase()] || []
     ).map(item => item.toLowerCase()); 
 
+    console.log("allerenRestricionLIst", allergenRestrictionsList);
+
+
     // Find all possible food items to avoid
-    const allToAvoid = [...new Set(allergenRestrictionsList.concat(dietaryRestrictionsList))]; // check
+    let allToAvoid = [...new Set(allergenRestrictionsList.concat(dietaryRestrictionsList))]; // check
+    console.log("allToavoid", allToAvoid);
+
+    //add spaces after commans in userJson
+    userJsonData = JSON.parse(userJsonData.replace(/,/g, ', '))
+    console.log("userJsonDataworkingbeforefitering?", userJsonData)
+
     // Filtering initial menu_items
-    const filteredMenuItems = data.filter(item => {
+    const filteredMenuItems = userJsonData.filter(item => {
         const ingredients = item.ingredients.toLowerCase().split(', ');
-        return !ingredients.some(ingredient => allToAvoid.includes(ingredient));
+        return !ingredients.some(ingredient => allToAvoid.includes(ingredient.trim()));
     }); 
+
+    console.log("filteredmenudata", filteredMenuItems)
 
     // Weights
     const proteinWeight = 0.00176352705;
@@ -145,18 +187,20 @@ const actuallyManipulateData = (userJsonData, userAllergensList, userRestriction
     // let wantsSodium = 1;
     // let wantsCholesterol = 1;
     // Bools 1 = high, -1 = low, 0 = not specified
-    retrieveAndManipulateGoalData().then(manipulatedData => {
-        // Use manipulatedData here
-        setWantsProtein(manipulatedData.protein);
-        setWantsCarbs(manipulatedData.carbs);
-        setWantsFat(manipulatedData.fat);
-        setWantsSugar(manipulatedData.sugar);
-        setWantsSodium(manipulatedData.sodium);
-        setWantsCholesterol(manipulatedData.cholesterol);
-        // console.log('Manipulated data:', manipulatedData);
-    }).catch(error => {
-        console.error('Error retrieving and manipulating data:', error);
-    });
+
+
+    // retrieveAndManipulateGoalData().then(manipulatedData => {
+    //     // Use manipulatedData here
+    //     setWantsProtein(manipulatedData.protein);
+    //     setWantsCarbs(manipulatedData.carbs);
+    //     setWantsFat(manipulatedData.fat);
+    //     setWantsSugar(manipulatedData.sugar);
+    //     setWantsSodium(manipulatedData.sodium);
+    //     setWantsCholesterol(manipulatedData.cholesterol);
+    //     // console.log('Manipulated data:', manipulatedData);
+    // }).catch(error => {
+    //     console.error('Error retrieving and manipulating data:', error);
+    // });
 
 
 
@@ -199,7 +243,8 @@ const actuallyManipulateData = (userJsonData, userAllergensList, userRestriction
 
     // Convert the list of dictionaries to JSON
     // const resultJson = JSON.stringify(resultList, null, 2);
+    console.log("resultList", resultList)
     return resultList;
 }
 
-export default manipulateData;
+export default manipulateData
