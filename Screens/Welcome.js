@@ -34,7 +34,7 @@ const Welcome = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>MenuApp</Text>
+      <Text style={styles.title}>Menu Minded</Text>
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
